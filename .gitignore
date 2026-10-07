@@ -11,3 +11,6 @@ latex_build/*.toc
 bucket-policy.json
 
 latex_build/
+
+*.pdf
+Ali_Usama_IA642_Week06_Lab6.1_Serverless_API_Security.pdf
