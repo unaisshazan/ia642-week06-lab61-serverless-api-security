@@ -1,0 +1,4 @@
+﻿no token -> HTTP 401
+ALICE_TOKEN_PREFIX=eyJraWQiOiJZOFlWQ1JzODJsdzZiN3IxS1A5akxJ...
+OWN_ACCOUNT={"caller": "alice", "account": {"card_last4": "4242", "balance": "4200", "owner": "alice", "account_id": "1001"}}
+BOLA_LEAK={"caller": "alice", "account": {"owner": "bob", "card_last4": "7733", "balance": "98750", "account_id": "1002"}}

@@ -1,0 +1,1 @@
+﻿arn:aws:iam::626672433625:role/ia642-lab-role

@@ -1,0 +1,2 @@
+﻿pool=us-east-1_e7jjz4igA
+client=65re926cikt530ktekg4g80ngj

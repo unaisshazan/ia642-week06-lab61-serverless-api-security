@@ -1,0 +1,7 @@
+ACCT=626672433625
+PREFIX=ia642-lab
+ROLE_ARN=arn:aws:iam::626672433625:role/ia642-lab-role
+POOL_ID=us-east-1_e7jjz4igA
+CLIENT_ID=65re926cikt530ktekg4g80ngj
+API_ID=r1e1dtd1q6
+ENDPOINT=https://r1e1dtd1q6.execute-api.us-east-1.amazonaws.com

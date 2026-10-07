@@ -1,0 +1,13 @@
+tmp/
+*.zip
+__pycache__/
+latex_build/*.aux
+latex_build/*.log
+latex_build/*.out
+latex_build/*.toc
+.aws/
+*.pyc
+.DS_Store
+bucket-policy.json
+
+latex_build/

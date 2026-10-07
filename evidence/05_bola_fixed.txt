@@ -1,0 +1,2 @@
+﻿OWN={"caller": "alice", "account": {"card_last4": "4242", "balance": "4200", "owner": "alice", "account_id": "1001"}} <- HTTP 200
+BOB={"error": "forbidden", "caller": "alice"} <- HTTP 403

@@ -1,0 +1,5 @@
+﻿SKIPPED - live demo left running
+ENDPOINT=https://r1e1dtd1q6.execute-api.us-east-1.amazonaws.com
+POOL_ID=us-east-1_e7jjz4igA
+CLIENT_ID=65re926cikt530ktekg4g80ngj
+API_ID=r1e1dtd1q6

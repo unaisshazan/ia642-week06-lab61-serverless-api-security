@@ -1,0 +1,1 @@
+﻿{"caller": "alice", "account": {"account_id": "1001", "balance": "4200", "card_last4": "4242", "fraud_score": "0.91", "internal_note": "VIP-PHI-REVIEW", "owner": "alice"}}

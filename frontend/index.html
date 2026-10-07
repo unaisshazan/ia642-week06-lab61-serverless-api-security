@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Meridian Accounts API — Lab 6.1 Live Demo</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --ink: #14212b;
+      --muted: #5c6b76;
+      --paper: #f3f0e8;
+      --card: #fffdf8;
+      --line: #d5cfc0;
+      --accent: #0d6e6e;
+      --accent-deep: #0a5252;
+      --danger: #9b2c2c;
+      --ok: #1f6b3a;
+      --shadow: 0 18px 50px rgba(20, 33, 43, 0.08);
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: "DM Sans", system-ui, sans-serif;
+      color: var(--ink);
+      background:
+        radial-gradient(900px 420px at 10% -10%, rgba(13,110,110,.18), transparent 55%),
+        radial-gradient(700px 360px at 100% 0%, rgba(155,44,44,.10), transparent 50%),
+        linear-gradient(180deg, #efe9dc 0%, var(--paper) 45%, #e7e2d6 100%);
+    }
+    main {
+      width: min(920px, calc(100% - 2rem));
+      margin: 0 auto;
+      padding: 2.5rem 0 3.5rem;
+    }
+    .brand {
+      font-family: "Instrument Serif", Georgia, serif;
+      font-size: clamp(2.2rem, 5vw, 3.4rem);
+      line-height: 1.05;
+      margin: 0 0 .35rem;
+      letter-spacing: -0.02em;
+    }
+    .lede {
+      color: var(--muted);
+      max-width: 38rem;
+      margin: 0 0 1.75rem;
+      font-size: 1.02rem;
+    }
+    .panel {
+      background: var(--card);
+      border: 1px solid var(--line);
+      box-shadow: var(--shadow);
+      padding: 1.25rem 1.35rem;
+      margin-bottom: 1rem;
+    }
+    h2 {
+      margin: 0 0 .85rem;
+      font-size: .78rem;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      color: var(--muted);
+      font-weight: 700;
+    }
+    .row {
+      display: grid;
+      grid-template-columns: 1fr 1fr auto;
+      gap: .65rem;
+      align-items: end;
+    }
+    @media (max-width: 700px) {
+      .row { grid-template-columns: 1fr; }
+    }
+    label {
+      display: block;
+      font-size: .78rem;
+      color: var(--muted);
+      margin-bottom: .3rem;
+    }
+    input, select {
+      width: 100%;
+      border: 1px solid var(--line);
+      background: #fff;
+      color: var(--ink);
+      padding: .7rem .75rem;
+      font: inherit;
+    }
+    button {
+      border: 0;
+      background: var(--accent);
+      color: #fff;
+      font: inherit;
+      font-weight: 700;
+      padding: .78rem 1.1rem;
+      cursor: pointer;
+    }
+    button:hover { background: var(--accent-deep); }
+    button.secondary {
+      background: transparent;
+      color: var(--accent-deep);
+      border: 1px solid var(--accent);
+    }
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: .55rem;
+      margin-top: .9rem;
+    }
+    .meta {
+      font-size: .85rem;
+      color: var(--muted);
+      margin-top: .75rem;
+      word-break: break-all;
+    }
+    .status {
+      display: inline-block;
+      padding: .15rem .45rem;
+      font-size: .75rem;
+      font-weight: 700;
+      letter-spacing: .04em;
+      text-transform: uppercase;
+    }
+    .status.ok { background: rgba(31,107,58,.12); color: var(--ok); }
+    .status.bad { background: rgba(155,44,44,.12); color: var(--danger); }
+    .status.idle { background: rgba(92,107,118,.12); color: var(--muted); }
+    pre {
+      margin: .7rem 0 0;
+      padding: .9rem 1rem;
+      background: #14212b;
+      color: #e8f0f2;
+      overflow: auto;
+      font-size: .82rem;
+      line-height: 1.45;
+      min-height: 7rem;
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+    .hint {
+      font-size: .86rem;
+      color: var(--muted);
+      margin: .55rem 0 0;
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <p class="brand">Meridian</p>
+    <p class="lede">
+      Live Lab 6.1 demo: Cognito login + serverless accounts API.
+      Try your own account (200), then Bob&rsquo;s (403 after the BOLA fix).
+    </p>
+
+    <section class="panel">
+      <h2>Sign in</h2>
+      <div class="row">
+        <div>
+          <label for="user">Username</label>
+          <input id="user" value="alice" autocomplete="username" />
+        </div>
+        <div>
+          <label for="pass">Password</label>
+          <input id="pass" type="password" value="Passw0rd!" autocomplete="current-password" />
+        </div>
+        <button id="loginBtn" type="button">Get token</button>
+      </div>
+      <p class="meta" id="authMeta"><span class="status idle">Not signed in</span></p>
+    </section>
+
+    <section class="panel">
+      <h2>Call API</h2>
+      <div class="row">
+        <div>
+          <label for="acct">Account ID</label>
+          <select id="acct">
+            <option value="1001">1001 — alice (own)</option>
+            <option value="1002">1002 — bob (BOLA test)</option>
+          </select>
+        </div>
+        <div></div>
+        <button id="callBtn" type="button" disabled>GET /accounts/{id}</button>
+      </div>
+      <div class="actions">
+        <button class="secondary" id="noTokBtn" type="button">Call without token (expect 401)</button>
+        <button class="secondary" id="hdrBtn" type="button" disabled>Show security headers</button>
+      </div>
+      <p class="hint">API: <span id="endpointLabel"></span></p>
+    </section>
+
+    <section class="panel">
+      <h2>Response</h2>
+      <p class="meta" id="httpMeta"><span class="status idle">Waiting</span></p>
+      <pre id="out">Open this page, sign in as alice, then request account 1001 and 1002.</pre>
+    </section>
+  </main>
+
+  <script>
+    // Injected / overridable config for the live Free Tier stack
+    const CONFIG = {
+      region: "us-east-1",
+      userPoolId: "us-east-1_e7jjz4igA",
+      clientId: "65re926cikt530ktekg4g80ngj",
+      endpoint: "https://r1e1dtd1q6.execute-api.us-east-1.amazonaws.com",
+    };
+
+    const out = document.getElementById("out");
+    const authMeta = document.getElementById("authMeta");
+    const httpMeta = document.getElementById("httpMeta");
+    const callBtn = document.getElementById("callBtn");
+    const hdrBtn = document.getElementById("hdrBtn");
+    document.getElementById("endpointLabel").textContent = CONFIG.endpoint;
+
+    let idToken = "";
+
+    function setHttp(code, ok) {
+      const cls = ok ? "ok" : (code ? "bad" : "idle");
+      const label = code ? `HTTP ${code}` : "Waiting";
+      httpMeta.innerHTML = `<span class="status ${cls}">${label}</span>`;
+    }
+
+    async function cognitoLogin(username, password) {
+      const res = await fetch(`https://cognito-idp.${CONFIG.region}.amazonaws.com/`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/x-amz-json-1.1",
+          "X-Amz-Target": "AWSCognitoIdentityProviderService.InitiateAuth",
+        },
+        body: JSON.stringify({
+          AuthFlow: "USER_PASSWORD_AUTH",
+          ClientId: CONFIG.clientId,
+          AuthParameters: { USERNAME: username, PASSWORD: password },
+        }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.message || data.__type || "Login failed");
+      return data.AuthenticationResult.IdToken;
+    }
+
+    async function callApi(accountId, withToken) {
+      const url = `${CONFIG.endpoint}/accounts/${accountId}`;
+      const headers = {};
+      if (withToken) {
+        if (!idToken) throw new Error("Sign in first");
+        headers.Authorization = idToken;
+      }
+      const res = await fetch(url, { headers });
+      const text = await res.text();
+      let pretty = text;
+      try { pretty = JSON.stringify(JSON.parse(text), null, 2); } catch (_) {}
+      setHttp(res.status, res.status >= 200 && res.status < 300);
+      out.textContent = pretty;
+      return res;
+    }
+
+    document.getElementById("loginBtn").onclick = async () => {
+      try {
+        out.textContent = "Signing in via Cognito...";
+        idToken = await cognitoLogin(
+          document.getElementById("user").value.trim(),
+          document.getElementById("pass").value
+        );
+        authMeta.innerHTML = `<span class="status ok">Signed in</span> token prefix: ${idToken.slice(0, 28)}...`;
+        callBtn.disabled = false;
+        hdrBtn.disabled = false;
+        out.textContent = "Signed in. Try GET account 1001 (own) then 1002 (should be 403).";
+        setHttp(null, false);
+      } catch (e) {
+        authMeta.innerHTML = `<span class="status bad">Login failed</span>`;
+        out.textContent = String(e.message || e);
+      }
+    };
+
+    callBtn.onclick = () => callApi(document.getElementById("acct").value, true).catch((e) => {
+      out.textContent = String(e.message || e);
+    });
+
+    document.getElementById("noTokBtn").onclick = () => callApi("1002", false).catch((e) => {
+      out.textContent = String(e.message || e);
+    });
+
+    hdrBtn.onclick = async () => {
+      try {
+        const url = `${CONFIG.endpoint}/accounts/${document.getElementById("acct").value}`;
+        const res = await fetch(url, { headers: { Authorization: idToken } });
+        const interesting = [
+          "strict-transport-security",
+          "x-content-type-options",
+          "content-security-policy",
+          "cache-control",
+          "content-type",
+        ];
+        const lines = [`HTTP ${res.status}`];
+        for (const h of interesting) {
+          const v = res.headers.get(h);
+          if (v) lines.push(`${h}: ${v}`);
+        }
+        // Note: browsers hide some headers unless Access-Control-Expose-Headers is set
+        if (lines.length === 1) {
+          lines.push("(Browser hid custom headers; CORS expose-headers may be limited.)");
+          lines.push("Body still proves API is live:");
+          lines.push(await res.text());
+        }
+        setHttp(res.status, res.ok);
+        out.textContent = lines.join("\n");
+      } catch (e) {
+        out.textContent = String(e.message || e);
+      }
+    };
+  </script>
+</body>
+</html>

@@ -1,0 +1,4 @@
+﻿POST -> HTTP 404
+DELETE -> HTTP 404
+tampered token -> HTTP 401
+CLAIMS={"origin_jti":"e594a75d-dde4-4428-850c-21796d291143","sub":"a4a824b8-1071-701e-b2c1-f35ca731f734","aud":"65re926cikt530ktekg4g80ngj","event_id":"80efbac7-cf0a-43ed-bbb2-ea665636dd9a","token_use":"id","auth_time":1791389921,"iss":"https://cognito-idp.us-east-1.amazonaws.com/us-east-1_e7jjz4igA","cognito:username":"alice","exp":1791393521,"iat":1791389921,"jti":"76f62147-259a-4dce-ab9a-3ad44040d62e"}
